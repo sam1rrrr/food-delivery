@@ -3,11 +3,11 @@ from django.contrib.auth.models import User
 from menus.models import Dish
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.conf import settings
-
+from django.contrib.auth.models import User
 class Review(models.Model):
     dish = models.ForeignKey(Dish, on_delete=models.CASCADE, related_name='reviews')
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, 
+        User, 
         on_delete=models.CASCADE
     )
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])

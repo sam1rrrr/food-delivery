@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from core.models import TimeStampedModel
+from django.contrib.auth.models import User
 
 class Restaurant(TimeStampedModel):
     name = models.CharField(max_length=255, verbose_name="Название ресторана")
@@ -8,7 +9,7 @@ class Restaurant(TimeStampedModel):
     contact_info = models.TextField(verbose_name="Контактная информация")
     description = models.TextField(blank=True, null=True, verbose_name="Описание")
     logo = models.ImageField(upload_to='logos/', blank=True, null=True, verbose_name="Логотип")
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Владелец")
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Владелец")
 
     def __str__(self):
         return self.name
