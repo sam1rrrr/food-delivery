@@ -4,7 +4,8 @@ from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
 from django.conf import settings
-from users.views import SignUpView
+from core.views import SignUpView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
