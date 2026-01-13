@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}Список ресторанов{% endblock %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col-md-6">
+        <h2 class="mb-0">Рестораны</h2>
+    </div>
+    <div class="col-md-6">
+        <form method="get" class="d-flex shadow-sm">
+            <div class="input-group">
+                <input class="form-control" type="search" name="q" 
+                       placeholder="Поиск ресторана или блюда..." value="{{ request.GET.q }}">
+                <button class="btn btn-success" type="submit">Найти</button>
+                {% if request.GET.q %}
+                    <a href="{% url 'restaurant_list' %}" class="btn btn-outline-secondary d-flex align-items-center">
+                         ✕
+                    </a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+
+<hr>
+
+{% if request.GET.q %}
+    <p class="text-muted">Результаты поиска по запросу: <strong>"{{ request.GET.q }}"</strong></p>
+{% endif %}
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for restaurant in restaurants %}
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                {% if restaurant.logo %}
+                    <img src="{{ restaurant.logo.url }}" class="card-img-top" alt="{{ restaurant.name }}" 
+                         style="height: 180px; object-fit: cover;">
+                {% else %}
+                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 180px;">
+                        <span>Нет логотипа</span>
+                    </div>
+                {% endif %}
+                
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">{{ restaurant.name }}</h5>
+                    <p class="card-text text-muted small">
+                        <i class="bi bi-geo-alt"></i> {{ restaurant.address }}
+                    </p>
+                    <p class="card-text">{{ restaurant.description|truncatewords:15 }}</p>
+                    
+                    {% if request.GET.q %}
+                        <div class="mt-2">
+                             <small class="text-success">Доступно в меню</small>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="card-footer bg-transparent border-0 pb-3">
+                    <a href="{% url 'restaurant_detail' restaurant.pk %}" class="btn btn-outline-primary w-100">Перейти к меню</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12 text-center py-5">
+            <h3 class="text-muted">Рестораны не найдены 😔</h3>
+            <p>Попробуйте изменить запрос или поискать другое блюдо.</p>
+            <a href="{% url 'restaurant_list' %}" class="btn btn-primary mt-3">Ко всем ресторанам</a>
+        </div>
+    {% endfor %}
+</div>
+
+{% if is_paginated %}
+    <nav class="mt-5">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Назад</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link">Страница {{ page_obj.number }} из {{ paginator.num_pages }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Вперед</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endif %}
+{% endblock %}

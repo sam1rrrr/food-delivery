@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная - Система доставки еды{% endblock %}
+
+{% block content %}
+<div class="p-5 mb-4 bg-light rounded-3 shadow-sm mt-5">
+    <div class="container-fluid py-5 text-center">
+        <h1 class="display-5 fw-bold">Добро пожаловать в Food Delivery</h1>
+        <p class="col-md-12 fs-4">
+            Лучшие рестораны города в одном месте. Управляйте меню, читайте отзывы и выбирайте лучшее!
+        </p>
+        
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mt-4">
+            <a href="{% url 'restaurant_list' %}" class="btn btn-primary btn-lg px-4 gap-3">
+                Смотреть рестораны
+            </a>
+            
+            {% if not user.is_authenticated %}
+                <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg px-4">Войти</a>
+            {% else %}
+                <a href="{% url 'restaurant_add' %}" class="btn btn-success btn-lg px-4">Добавить ресторан</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="row text-center mt-5">
+    <div class="col-md-4">
+        <div class="p-3">
+            <div class="display-6 mb-2">🍴</div>
+            <h4>Управление меню</h4>
+            <p class="text-muted">Добавляйте и редактируйте блюда вашего заведения.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="p-3">
+            <div class="display-6 mb-2">⭐</div>
+            <h4>Рейтинги</h4>
+            <p class="text-muted">Оценивайте блюда по шкале от 1 до 5.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="p-3">
+            <div class="display-6 mb-2">🔍</div>
+            <h4>Умный поиск</h4>
+            <p class="text-muted">Ищите по названию ресторана или блюда.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

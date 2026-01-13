@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Оставить отзыв на {{ dish.name }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white p-3">
+                <h4 class="mb-0">Ваш отзыв о блюде</h4>
+            </div>
+            <div class="card-body p-4">
+                <div class="mb-4 text-center">
+                    <h5 class="text-muted">Блюдо: <strong>"{{ dish.name }}"</strong></h5>
+                    <p class="small">в ресторане {{ dish.restaurant.name }}</p>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Оценка</label>
+                        <select name="rating" class="form-select border-primary-subtle" required>
+                            <option value="" selected disabled>Выберите оценку...</option>
+                            <option value="5">5 — Отлично! ⭐⭐⭐⭐⭐</option>
+                            <option value="4">4 — Хорошо ⭐⭐⭐⭐</option>
+                            <option value="3">3 — Нормально ⭐⭐⭐</option>
+                            <option value="2">2 — Плохо ⭐⭐</option>
+                            <option value="1">1 — Ужасно ⭐</option>
+                        </select>
+                        {% if form.rating.errors %}
+                            <div class="text-danger small">{{ form.rating.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Ваш комментарий</label>
+                        <textarea name="text" class="form-control border-primary-subtle" 
+                                  rows="4" placeholder="Расскажите, понравилось ли вам блюдо..." required></textarea>
+                        {% if form.text.errors %}
+                            <div class="text-danger small">{{ form.text.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">Опубликовать отзыв</button>
+                        <a href="{% url 'dish_detail' dish.id %}" class="btn btn-link text-muted">Отмена</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
