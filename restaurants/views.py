@@ -5,8 +5,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 
 from core.mixins import OwnerRequiredMixin
+
+
 class RestaurantPaginationMixin:
     paginate_by = 3 
+
 
 class RestaurantListView(RestaurantPaginationMixin, ListView):
     model = Restaurant
@@ -23,6 +26,7 @@ class RestaurantListView(RestaurantPaginationMixin, ListView):
             ).distinct()
         return Restaurant.objects.all()
 
+
 class RestaurantCreateView(LoginRequiredMixin, CreateView):
     model = Restaurant
     fields = ['name', 'address', 'contact_info', 'description', 'logo']
@@ -33,11 +37,13 @@ class RestaurantCreateView(LoginRequiredMixin, CreateView):
         form.instance.owner = self.request.user
         return super().form_valid(form)
 
+
 class RestaurantUpdateView(OwnerRequiredMixin, UpdateView):
     model = Restaurant
     fields = ['name', 'address', 'contact_info', 'description', 'logo']
     template_name = 'restaurants/create.html'
     success_url = '/restaurants/'
+
 
 class RestaurantDeleteView(OwnerRequiredMixin, DeleteView):
     model = Restaurant
